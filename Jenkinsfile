@@ -7,12 +7,4 @@ node {
          error('Dockerfile missing.')
       }
    }
-   stage('Build Docker') {
-       // build the docker image from the source code using the BUILD_ID parameter in image name
-         docker build -t flask-app .
-   }
-   stage("run docker container"){
-        docker run -it -d -p 8000:5000 --name flask-app:latest"
-    }
-
 }
