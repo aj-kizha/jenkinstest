@@ -1,9 +1,12 @@
 pipeline {
-  stages {  
-    stage('test') {
-      steps {
-        'docker build -t flask-app .'
-      }
+    agent {
+        docker { image 'node:14-alpine' }
     }
-  }
+    stages {
+        stage('Test') {
+            steps {
+                sh 'node --version'
+            }
+        }
+    }
 }
