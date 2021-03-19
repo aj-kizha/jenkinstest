@@ -12,4 +12,5 @@ node {
       steps {
         'python test.py'
       }
+   }
 }
