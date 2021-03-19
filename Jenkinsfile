@@ -1,5 +1,5 @@
 
-node {
+pipeline {
    stage('Get Source') {
       // copy source code from local file system and test
       // for a Dockerfile to build the Docker image
