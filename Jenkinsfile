@@ -1,12 +1,8 @@
-pipeline {
-    agent {
-        dockerfile true
-    }
-    stages {
-        stage('Test') {
-            steps {
-                sh 'node --version'
-            }
-        }
+node {
+    checkout scm
+    def testImage = docker.build("test-image", "./dockerfiles/test") 
+
+    testImage.inside {
+        sh 'make test'
     }
 }
