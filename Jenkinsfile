@@ -4,8 +4,7 @@ node {
       registryCredential = 'dockerlogin'
         
     }
-    checkout scm
-    sh 'python test.py' 
+    checkout scm 
     registryCredential = 'dockerlogin'
     docker.withRegistry( '', registryCredential )
     {
