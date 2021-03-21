@@ -5,6 +5,7 @@ node {
         
     }
     checkout scm
+    registryCredential = 'dockerlogin'
     docker.withRegistry( '', registryCredential )
     {
     def customImage = docker.build("my-image:${env.BUILD_ID}")
