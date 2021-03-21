@@ -5,11 +5,14 @@ node {
         
     }
     checkout scm
+    stages
+    {
     stage('test') {
       steps {
         sh 'python test.py'
       }   
     }
+    }    
     registryCredential = 'dockerlogin'
     docker.withRegistry( '', registryCredential )
     {
