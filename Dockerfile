@@ -7,6 +7,7 @@ COPY . /app
 
 RUN pip
 RUN pip --no-cache-dir install -r requirements.txt
+RUN pip install flake8
 
 EXPOSE 5000
 
