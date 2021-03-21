@@ -10,9 +10,7 @@ node {
     {
    
     def customImage = docker.build("ajaykizha/imagerepo:${env.BUILD_ID}")
-    sh 'echo hello'  
-    sh 'python test.py'    
-    sh 'flake8'
+    sh 'echo hello' 
     customImage.run('-p 5000:5000')   
     customImage.push()
  }
