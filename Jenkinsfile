@@ -9,9 +9,8 @@ node {
     docker.withRegistry( '', registryCredential )
     {
    
-    def customImage = docker.build("ajaykizha/imagerepo")
-    customImage.run('-p 5000:5000')
+    def customImage = docker.build("ajaykizha/imagerepo:'${env.BUILD_ID}')
+    customImage.run('-p 5000:5000')   
     customImage.push()
-    customImage.push('${env.BUILD_ID}')
  }
 }
