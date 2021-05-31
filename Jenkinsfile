@@ -8,8 +8,9 @@ node {
     registryCredential = 'dockerlogin'
     echo "cheking permissions"
     sh "whoami"
-    sh 'sudo usermod -a -G docker jenkins'
-    sh 'sudo service jenkins restart'
+    //sh 'sudo usermod -a -G docker jenkins'
+    //sh 'sudo service jenkins restart'
+    sh 'sudo chmod 777 /var/run/docker.sock'
     sh 'ls -lrt /var/run/ '
     docker.withRegistry( '', registryCredential )
     {
