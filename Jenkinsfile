@@ -7,7 +7,7 @@ node {
     checkout scm 
     registryCredential = 'dockerlogin'
     echo "cheking permissions"
-    sh "whami"
+    sh "whoami"
     sh 'ls -lrt /var/run/ '
     docker.withRegistry( '', registryCredential )
     {
