@@ -16,6 +16,7 @@ node {
     }
     stage('Sonarqube Analysis')
     {
+     echo "inside sonarqube analysis"   
      sh 'ls -lrt'   
     }
 }
