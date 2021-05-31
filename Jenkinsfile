@@ -6,10 +6,11 @@ node {
     }
     checkout scm 
     registryCredential = 'dockerlogin'
+    echo "cheking permissions"
+    sh 'ls -lrt /usr/run/ '
     docker.withRegistry( '', registryCredential )
     {
-   
-    sh 'ls -lrt /usr/run/ '    
+       
     def customImage = docker.build("ajaykizha/imagerepo:${env.BUILD_ID}")
     sh 'echo hello' 
     customImage.run('-p 5000:5000')   
