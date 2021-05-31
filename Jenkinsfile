@@ -24,6 +24,10 @@ node {
     {
      echo "inside sonarqube analysis"   
      sh 'ls -lrt'   
+     withSonarQubeEnv('sonarqubeserver')
+        {
+           echo "sonarqubeserver"
+        }
     }
     
 }
