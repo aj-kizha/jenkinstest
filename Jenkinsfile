@@ -27,6 +27,8 @@ node {
      withSonarQubeEnv('sonarqubeserver')
         {
            echo "sonarqubeserver"
+           scannerHome = tool 'sonarscanner' 
+           sh "${scannerHome}/bin/sonar-scanner"
         }
     }
     
