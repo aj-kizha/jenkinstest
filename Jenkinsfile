@@ -9,6 +9,7 @@ node {
     echo "cheking permissions"
     sh "whoami"
     sh 'sudo usermod -a -G docker jenkins'
+    sh 'sudo service jenkins restart'
     sh 'ls -lrt /var/run/ '
     docker.withRegistry( '', registryCredential )
     {
