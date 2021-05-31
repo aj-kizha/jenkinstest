@@ -13,5 +13,9 @@ node {
     sh 'echo hello' 
     customImage.run('-p 5000:5000')   
     customImage.push()
- }
+    }
+    stage('Sonarqube Analysis')
+    {
+     sh 'ls -lrt'   
+    }
 }
