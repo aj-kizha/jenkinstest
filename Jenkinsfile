@@ -7,7 +7,7 @@ node {
     checkout scm 
     registryCredential = 'dockerlogin'
     echo "cheking permissions"
-    sh 'ls -lrt /usr/run/ '
+    sh 'ls -lrt /var/run/ '
     docker.withRegistry( '', registryCredential )
     {
        
