@@ -9,4 +9,5 @@ def home():
 
 
 if __name__ == '__main__':
-    app.run()
+    print(eval('1+2'))
+    app.run('0.0.0.0')

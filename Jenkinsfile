@@ -31,5 +31,10 @@ node {
            sh "${scannerHome}/bin/sonar-scanner"
         }
     }
+    stage('fetch metrics and insert to dynamodb')
+    {
+        echo "fetch metrics and inset to db"
+        sh 'python fetchinsertdynamodb.py'
+    }
     
 }
