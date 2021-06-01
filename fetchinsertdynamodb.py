@@ -9,7 +9,8 @@ out = requests.get(url, params={'projectKey': 'pythonproj'},
 client = boto3.client(
     'dynamodb',
     aws_access_key_id=sys.argv[1],
-    aws_secret_access_key=sys.argv[2]
+    aws_secret_access_key=sys.argv[2],
+    region_name="ap-south-1"
 )
 
 
