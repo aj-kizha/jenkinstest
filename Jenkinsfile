@@ -34,6 +34,7 @@ node {
     stage('fetch metrics and insert to dynamodb')
     {
         echo "fetch metrics and inset to db"
+        sh 'pip install boto3'
         sh 'python fetchinsertdynamodb.py'
     }
     
