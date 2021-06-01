@@ -1,5 +1,4 @@
 import requests
-import json
 import boto3
 
 url = 'http://127.0.0.1:9000/api/qualitygates/project_status'
