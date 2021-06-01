@@ -2,6 +2,8 @@ node {
     environment
     {
       registryCredential = 'dockerlogin'
+      AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
+      AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')  
         
     }
     checkout scm 
@@ -31,12 +33,7 @@ node {
            sh "${scannerHome}/bin/sonar-scanner"
         }
     }
-    environment {
-        AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
-        AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
-        sh 'echo $AWS_ACCESS_KEY_ID'
-        sh 'echo "$AWS_SECRET_ACCESS_KEY"'
-    }
+   
     stage('fetch metrics and insert to dynamodb')
     {
         //AWS_ACCESS_KEY_ID  = credentials('jenkins-aws-secret-key-id')
