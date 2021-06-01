@@ -31,6 +31,10 @@ node {
            sh "${scannerHome}/bin/sonar-scanner"
         }
     }
+    environment {
+        AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
+    }
     stage('fetch metrics and insert to dynamodb')
     {
         AWS_ACCESS_KEY_ID  = credentials('jenkins-aws-secret-key-id')
