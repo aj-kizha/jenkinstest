@@ -33,6 +33,10 @@ node {
     }
     stage('fetch metrics and insert to dynamodb')
     {
+        AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
+        echo '$AWS_ACCESS_KEY_ID'
+        echo '$AWS_SECRET_ACCESS_KEY'
         echo "fetch metrics and inset to db"
         sh 'pip install boto3'
         sh 'python fetchinsertdynamodb.py'
