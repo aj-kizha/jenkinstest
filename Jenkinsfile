@@ -43,7 +43,7 @@ node {
         sh 'echo $AWS_SECRET_ACCESS_KEY'
         echo "fetch metrics and inset to db"
         sh 'pip install boto3'
-        sh 'python fetchinsertdynamodb.py'
+        sh 'python fetchinsertdynamodb.py AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY'
     }
     
 }
