@@ -43,6 +43,8 @@ node {
   echo USERNAME
   // or inside double quotes for string interpolation
   echo "username is $USERNAME"
+  echo "password is $PASSWORD"
+        
   sh 'pip install boto3'
   sh 'python fetchinsertdynamodb.py $USERNAME $PASSWORD'
    }
