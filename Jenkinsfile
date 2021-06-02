@@ -2,8 +2,11 @@ node {
     environment
     {
       registryCredential = 'dockerlogin'
+      AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
+      AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')  
         
     }
+   
     checkout scm 
     registryCredential = 'dockerlogin'
     echo "cheking permissions"
@@ -31,19 +34,31 @@ node {
            sh "${scannerHome}/bin/sonar-scanner"
         }
     }
-    environment {
-        AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
-        AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
-    }
+     withCredentials([usernamePassword(credentialsId: 'awsdynamodbaccess', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
+    {
+  // available as an env variable, but will be masked if you try to print it out any which way
+  // note: single quotes prevent Groovy interpolation; expansion is by Bourne Shell, which is what you want
+  sh 'echo $PASSWORD'
+  // also available as a Groovy variable
+  echo USERNAME
+  // or inside double quotes for string interpolation
+  echo "username is $USERNAME"
+  echo "password is $PASSWORD"
+        
+  sh 'pip install boto3'
+  sh 'python fetchinsertdynamodb.py $USERNAME $PASSWORD'
+   }
     stage('fetch metrics and insert to dynamodb')
     {
-        AWS_ACCESS_KEY_ID  = credentials('jenkins-aws-secret-key-id')
-        AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
-        sh 'echo $AWS_ACCESS_KEY_ID'
-        sh 'echo $AWS_SECRET_ACCESS_KEY'
+        //AWS_ACCESS_KEY_ID  = credentials('jenkins-aws-secret-key-id')
+        //AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
+        //echo $AWS_ACCESS_KEY_ID
+        //echo $AWS_SECRET_ACCESS_KEY
+       // echo USERNAME
+        //echo "username is $USERNAME"
         echo "fetch metrics and inset to db"
-        sh 'pip install boto3'
-        sh 'python fetchinsertdynamodb.py AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY'
+        //sh 'pip install boto3'
+        //sh 'python fetchinsertdynamodb.py $USERNAME $PASSWORD'
     }
     
 }
