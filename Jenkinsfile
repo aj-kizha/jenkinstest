@@ -38,8 +38,8 @@ node {
     {
         //AWS_ACCESS_KEY_ID  = credentials('jenkins-aws-secret-key-id')
         //AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
-        sh 'echo "$AWS_ACCESS_KEY_ID"'
-        sh 'echo "$AWS_SECRET_ACCESS_KEY"'
+        echo $AWS_ACCESS_KEY_ID
+        echo $AWS_SECRET_ACCESS_KEY
         echo "fetch metrics and inset to db"
         sh 'pip install boto3'
         sh 'python fetchinsertdynamodb.py $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY'
