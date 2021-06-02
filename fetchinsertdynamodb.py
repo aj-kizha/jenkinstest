@@ -13,11 +13,11 @@ client = boto3.client(
     region_name="ap-south-1"
 )
 
-
 records = {}
 records['projectid'] = 'pythonproj'
 records['condition'] = out.json()['projectStatus']['conditions']
 
-dynamodb = boto3.resource('dynamodb', region_name="ap-south-1")
+dynamodb = boto3.resource('dynamodb', aws_access_key_id=sys.argv[1], aws_secret_access_key=sys.argv[2],
+                          region_name="ap-south-1")
 table = dynamodb.Table('projectquality')
 table.put_item(Item=records)
