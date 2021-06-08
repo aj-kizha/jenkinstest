@@ -26,7 +26,8 @@ table.put_item(Item=records)
 
 '''Security insertion'''
 securityurl = 'http://127.0.0.1:9000/api/hotspots/search'
-out = requests.get(securityurl, params={'projectKey' : 'pythonproj'}, auth=('admin','admin1'))
+out = requests.get(securityurl, params= \
+                   {'projectKey' : 'pythonproj'}, auth=('admin', 'admin1'))
 security_out = out.json()
 
 hotspot_record = {}
@@ -37,7 +38,8 @@ for item in security_out['hotspots']:
     hotspot_record['projectid'] = item['project']
     hotspot_record['datetime'] = dt_string
     hotspot_record['securitycat'] = item['securityCategory']
-    hotspot_record['vulnerabilityProbability'] = item['vulnerabilityProbability']
+    hotspot_record['vulnerabilityProbability'] = \
+    item['vulnerabilityProbability']
     hotspot_record['component'] = item['component']
 security_table = dynamodb.Table('projecthotspot')
 security_table.put_item(Item=records)
