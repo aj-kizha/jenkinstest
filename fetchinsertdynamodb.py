@@ -42,4 +42,4 @@ for item in security_out['hotspots']:
         item['vulnerabilityProbability']
     hotspot_record['component'] = item['component']
 security_table = dynamodb.Table('projecthotspot')
-security_table.put_item(Item=records)
+security_table.put_item(Item=hotspot_record)
