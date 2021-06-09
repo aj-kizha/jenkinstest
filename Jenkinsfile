@@ -25,6 +25,7 @@ node {
            //sh "bandit -r . -f json"
            sh "executing bandit report" 
            sh "bandit -r . -f json -o report.json"
+           echo "y" 
            sh "ls -lrt" 
         }
     }catch(e)
