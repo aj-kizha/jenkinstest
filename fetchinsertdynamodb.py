@@ -46,7 +46,7 @@ security_table = dynamodb.Table('projecthotspot')
 security_table.put_item(Item=hotspot_record)
 
 with open('report.json') as fp:
-  banditjson = json.load(fp,parse_float=Decimal))
+  banditjson = json.load(fp,parse_float=Decimal)
 print("bandit is", banditjson)
 print("type is", type(banditjson))
 bandit_report = {}
