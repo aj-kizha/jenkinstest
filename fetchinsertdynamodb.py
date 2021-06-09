@@ -47,6 +47,8 @@ security_table.put_item(Item=hotspot_record)
 
 with open('report.json') as fp:
   banditjson = json.load(fp)
+print("bandit is", banditjson)
+print("type is", type(banditjson)
 bandit_report = {}
 bandit_report['projectid'] = 'pythonproj'
 bandit_report['result'] = banditjson
