@@ -2,8 +2,11 @@ node {
     environment
     {
       registryCredential = 'dockerlogin'
+      AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
+      AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')  
         
     }
+   
     checkout scm 
     registryCredential = 'dockerlogin'
     echo "cheking permissions"
@@ -16,7 +19,8 @@ node {
     {
        echo "running flake8"
        sh "ls -lrt"
-       sh "flake8" 
+       sh "flake8"
+        sh "bandit -r . -f json -o report.json"
     }
     docker.withRegistry( '', registryCredential )
     {
@@ -37,8 +41,23 @@ node {
            sh "${scannerHome}/bin/sonar-scanner"
         }
     }
+     withCredentials([usernamePassword(credentialsId: 'awsdynamodbaccess', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
+    {
+  // available as an env variable, but will be masked if you try to print it out any which way
+  // note: single quotes prevent Groovy interpolation; expansion is by Bourne Shell, which is what you want
+  sh 'echo $PASSWORD'
+  // also available as a Groovy variable
+  echo USERNAME
+  // or inside double quotes for string interpolation
+  echo "username is $USERNAME"
+  echo "password is $PASSWORD"
+        
+  sh 'pip install boto3'
+  sh 'python fetchinsertdynamodb.py $USERNAME $PASSWORD'
+   }
     stage('fetch metrics and insert to dynamodb')
     {
+<<<<<<< HEAD
         AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
         AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
         echo '$AWS_ACCESS_KEY_ID'
@@ -47,6 +66,17 @@ node {
         sh 'python fetchinsertdynamodb.py'
         
         
+=======
+        //AWS_ACCESS_KEY_ID  = credentials('jenkins-aws-secret-key-id')
+        //AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
+        //echo $AWS_ACCESS_KEY_ID
+        //echo $AWS_SECRET_ACCESS_KEY
+       // echo USERNAME
+        //echo "username is $USERNAME"
+        echo "fetch metrics and inset to db"
+        //sh 'pip install boto3'
+        //sh 'python fetchinsertdynamodb.py $USERNAME $PASSWORD'
+>>>>>>> 77427f0d93d74201e86041d24f520ac9ea6e935d
     }
     
 }
