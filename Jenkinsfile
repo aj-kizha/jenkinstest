@@ -38,6 +38,9 @@ node {
     sh 'echo hello' 
     //customImage.run('-p 5000:5000')   
     customImage.push()
+    echo "Dcoker command"
+    sh 'docker ps'  
+    sh 'docker scan --json --file Dockerfile --exclude-base sonarqube'     
     }
     stage('Sonarqube Analysis')
     {
@@ -45,9 +48,6 @@ node {
      sh 'ls -lrt'   
      withSonarQubeEnv('sonarqubeserver')
         {
-           echo "Dcoker command"
-           sh 'docker ps'  
-           sh 'docker scan --json --file Dockerfile --exclude-base sonarqube' 
            echo "sonarqubeserver"
            scannerHome = tool 'sonarscanner' 
            sh "${scannerHome}/bin/sonar-scanner"
