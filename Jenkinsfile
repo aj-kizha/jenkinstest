@@ -20,6 +20,8 @@ node {
        echo "running flake8"
        sh "ls -lrt"
        sh "flake8" 
+       sh "bandit -r . -f json"
+        sh "bandit -r . -f json -o report.json"
     }
     docker.withRegistry( '', registryCredential )
     {
