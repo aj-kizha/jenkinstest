@@ -6,7 +6,7 @@ node {
       AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')  
         
     }
-   
+    def flake8_status = true
     checkout scm 
     registryCredential = 'dockerlogin'
     echo "cheking permissions"
@@ -15,13 +15,19 @@ node {
     //sh 'sudo service jenkins restart'
     //sh 'sudo chmod 777 /var/run/docker.sock'
     //sh 'ls -lrt /var/run/ '
-    stage('QualityAnalysis')
+    try 
     {
-       echo "running flake8"
-       sh "ls -lrt"
-       sh "flake8" 
-       //sh "bandit -r . -f json"
-        sh "bandit -r . -f json -o report.json"
+        stage('QualityAnalysis')
+        {
+           echo "running flake8"
+           sh "ls -lrt"
+           sh "flake8" 
+           //sh "bandit -r . -f json"
+            sh "bandit -r . -f json -o report.json"
+        }
+    }catch(e)
+    {
+        flake8_status=false
     }
     docker.withRegistry( '', registryCredential )
     {
@@ -68,5 +74,14 @@ node {
         //sh 'pip install boto3'
         //sh 'python fetchinsertdynamodb.py $USERNAME $PASSWORD'
     }
+    
+    if (flake8_status)
+    {
+        echo "success"
+    }
+    else
+    {
+        echo "flake8 failed"
+    }    
     
 }
