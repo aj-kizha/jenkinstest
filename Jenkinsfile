@@ -25,7 +25,6 @@ node {
            //sh "bandit -r . -f json"
            sh "executing bandit report" 
            sh "bandit -r . -f json -o report.json"
-           echo "y" 
            sh "ls -lrt" 
         }
     }catch(e)
@@ -41,7 +40,8 @@ node {
     customImage.push()
     echo "Dcoker command"
     sh 'docker ps'  
-    sh 'docker scan --json --file Dockerfile --exclude-base sonarqube'     
+    sh 'docker scan --json --file Dockerfile --exclude-base sonarqube' 
+    echo "y"     
     }
     stage('Sonarqube Analysis')
     {
