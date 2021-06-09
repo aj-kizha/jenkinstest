@@ -2,6 +2,7 @@ import requests
 import boto3
 import sys
 from datetime import datetime
+import json
 
 url = 'http://127.0.0.1:9000/api/qualitygates/project_status'
 out = requests.get(url, params={'projectKey': 'pythonproj'},
