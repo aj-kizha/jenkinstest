@@ -15,6 +15,12 @@ node {
     //sh 'sudo service jenkins restart'
     //sh 'sudo chmod 777 /var/run/docker.sock'
     //sh 'ls -lrt /var/run/ '
+    stage('QualityAnalysis')
+    {
+       echo "running flake8"
+       sh "ls -lrt"
+       sh "flake8" 
+    }
     docker.withRegistry( '', registryCredential )
     {
        
