@@ -47,6 +47,7 @@ node {
         {
            echo "Dcoker command"
            sh 'docker ps'  
+           sh 'docker scan --json --file Dockerfile --exclude-base sonarqube' 
            echo "sonarqubeserver"
            scannerHome = tool 'sonarscanner' 
            sh "${scannerHome}/bin/sonar-scanner"
