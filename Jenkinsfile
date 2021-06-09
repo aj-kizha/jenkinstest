@@ -23,7 +23,8 @@ node {
            sh "ls -lrt"
            sh "flake8" 
            //sh "bandit -r . -f json"
-            sh "bandit -r . -f json -o report.json"
+           sh "bandit -r . -f json -o report.json"
+           sh "ls -lrt" 
         }
     }catch(e)
     {
