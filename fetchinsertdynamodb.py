@@ -43,3 +43,12 @@ for item in security_out['hotspots']:
     hotspot_record['component'] = item['component']
 security_table = dynamodb.Table('projecthotspot')
 security_table.put_item(Item=hotspot_record)
+
+with open('bandit-report.json') as fp:
+  banditjson = json.load(fp)
+bandit_report = {}
+bandt_report['projectid'] = 'pythonproj'
+bandit_report['result'] = banditjson
+bandit_table = dynamodb.Table('bandit')
+bandit_table.put_item(Item=bandit_report)
+
