@@ -19,12 +19,12 @@ node {
     {
         stage('QualityAnalysis')
         {
-           echo "running flake8"
+           //echo "running flake8"
            sh "ls -lrt"
-           sh "flake8" 
+           //sh "flake8" 
            //sh "bandit -r . -f json"
            sh "executing bandit report" 
-           sh "bandit -r . -f json -o report.json"
+           sh "bandit -r . -f json -o bandit-report.json"
            sh "ls -lrt" 
         }
     }catch(e)
