@@ -28,6 +28,8 @@ node {
     }
     stage('Sonarqube Analysis')
     {
+     echo "Dcoker command'   
+     sh 'docker ps'   
      echo "inside sonarqube analysis"   
      sh 'ls -lrt'   
      withSonarQubeEnv('sonarqubeserver')
