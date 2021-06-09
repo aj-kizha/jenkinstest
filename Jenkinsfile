@@ -45,7 +45,7 @@ node {
      sh 'ls -lrt'   
      withSonarQubeEnv('sonarqubeserver')
         {
-           echo "Dcoker command'   
+           echo "Dcoker command"
            sh 'docker ps'  
            echo "sonarqubeserver"
            scannerHome = tool 'sonarscanner' 
