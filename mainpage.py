@@ -10,5 +10,6 @@ def home():
 
 if __name__ == '__main__':
     _dict = {}
+    usernmame = 'aaa'
     print(eval('1+2'))
     app.run('0.0.0.0')
