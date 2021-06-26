@@ -8,7 +8,7 @@ COPY . /app
 RUN pip
 RUN pip --no-cache-dir install -r requirements.txt
 RUN pip install flake8
-RUN flake8
+#RUN flake8
 RUN python3 test.py
 
 EXPOSE 5000
