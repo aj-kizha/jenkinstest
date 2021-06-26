@@ -2,8 +2,11 @@ node {
     environment
     {
       registryCredential = 'dockerlogin'
+      AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
+      AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')  
         
     }
+    def flake8_status = true
     checkout scm 
     registryCredential = 'dockerlogin'
     echo "cheking permissions"
@@ -12,11 +15,23 @@ node {
     //sh 'sudo service jenkins restart'
     //sh 'sudo chmod 777 /var/run/docker.sock'
     //sh 'ls -lrt /var/run/ '
-    stage('QualityAnalysis')
+
+    try 
     {
-       echo "running flake8"
-       sh "ls -lrt"
-       sh "flake8" 
+        stage('QualityAnalysis')
+        {
+           //echo "running flake8"
+           sh "ls -lrt"
+           //sh "flake8" 
+           //sh "bandit -r . -f json"
+           sh "executing bandit report" 
+           sh "bandit -r . -f json -o report.json"
+           sh "ls -lrt" 
+        }
+    }catch(e)
+    {
+        flake8_status=false
+
     }
     docker.withRegistry( '', registryCredential )
     {
@@ -25,6 +40,10 @@ node {
     sh 'echo hello' 
     //customImage.run('-p 5000:5000')   
     customImage.push()
+    echo "Dcoker command"
+    sh 'docker ps'  
+    sh 'docker scan --json --file Dockerfile --exclude-base sonarqube' 
+    echo "y"     
     }
     stage('Sonarqube Analysis')
     {
@@ -39,16 +58,42 @@ node {
            sh "${scannerHome}/bin/sonar-scanner"
         }
     }
+     withCredentials([usernamePassword(credentialsId: 'awsdynamodbaccess', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
+    {
+  // available as an env variable, but will be masked if you try to print it out any which way
+  // note: single quotes prevent Groovy interpolation; expansion is by Bourne Shell, which is what you want
+  sh 'echo $PASSWORD'
+  // also available as a Groovy variable
+  echo USERNAME
+  // or inside double quotes for string interpolation
+  echo "username is $USERNAME"
+  echo "password is $PASSWORD"
+        
+  sh 'pip install boto3'
+  sh 'python fetchinsertdynamodb.py $USERNAME $PASSWORD'
+   }
     stage('fetch metrics and insert to dynamodb')
     {
-        AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
-        AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
-        echo '$AWS_ACCESS_KEY_ID'
-        echo '$AWS_SECRET_ACCESS_KEY'
+
+        //AWS_ACCESS_KEY_ID  = credentials('jenkins-aws-secret-key-id')
+        //AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
+        //echo $AWS_ACCESS_KEY_ID
+        //echo $AWS_SECRET_ACCESS_KEY
+       // echo USERNAME
+        //echo "username is $USERNAME"
         echo "fetch metrics and inset to db"
-        sh 'python fetchinsertdynamodb.py'
-        
-        
+        //sh 'pip install boto3'
+        //sh 'python fetchinsertdynamodb.py $USERNAME $PASSWORD'
+
     }
+    
+    if (flake8_status)
+    {
+        echo "success"
+    }
+    else
+    {
+        echo "flake8 failed"
+    }    
     
 }
