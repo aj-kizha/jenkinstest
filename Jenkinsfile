@@ -6,7 +6,7 @@ node {
       AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')  
         
     }
-   
+    def flake8_status = true
     checkout scm 
     registryCredential = 'dockerlogin'
     echo "cheking permissions"
@@ -15,12 +15,21 @@ node {
     //sh 'sudo service jenkins restart'
     //sh 'sudo chmod 777 /var/run/docker.sock'
     //sh 'ls -lrt /var/run/ '
-    stage('QualityAnalysis')
+    try 
     {
-       echo "running flake8"
-       sh "ls -lrt"
-       sh "flake8"
-        sh "bandit -r . -f json -o report.json"
+        stage('QualityAnalysis')
+        {
+           //echo "running flake8"
+           sh "ls -lrt"
+           //sh "flake8" 
+           //sh "bandit -r . -f json"
+           sh "executing bandit report" 
+           sh "bandit -r . -f json -o report.json"
+           sh "ls -lrt" 
+        }
+    }catch(e)
+    {
+        flake8_status=false
     }
     docker.withRegistry( '', registryCredential )
     {
@@ -29,6 +38,10 @@ node {
     sh 'echo hello' 
     //customImage.run('-p 5000:5000')   
     customImage.push()
+    echo "Dcoker command"
+    sh 'docker ps'  
+    sh 'docker scan --json --file Dockerfile --exclude-base sonarqube' 
+    echo "y"     
     }
     stage('Sonarqube Analysis')
     {
@@ -57,16 +70,6 @@ node {
    }
     stage('fetch metrics and insert to dynamodb')
     {
-<<<<<<< HEAD
-        AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
-        AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
-        echo '$AWS_ACCESS_KEY_ID'
-        echo '$AWS_SECRET_ACCESS_KEY'
-        echo "fetch metrics and inset to db"
-        sh 'python fetchinsertdynamodb.py'
-        
-        
-=======
         //AWS_ACCESS_KEY_ID  = credentials('jenkins-aws-secret-key-id')
         //AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
         //echo $AWS_ACCESS_KEY_ID
@@ -76,7 +79,15 @@ node {
         echo "fetch metrics and inset to db"
         //sh 'pip install boto3'
         //sh 'python fetchinsertdynamodb.py $USERNAME $PASSWORD'
->>>>>>> 77427f0d93d74201e86041d24f520ac9ea6e935d
     }
+    
+    if (flake8_status)
+    {
+        echo "success"
+    }
+    else
+    {
+        echo "flake8 failed"
+    }    
     
 }
